@@ -1,6 +1,5 @@
 import graphviz
 
-# 查找两个list中比给定值最小的值
 # def findlow( innerAn, outAn, current):
 #     res = 0
 #     for i in innerAn:
@@ -10,6 +9,7 @@ import graphviz
 #         if j < res:
 #             res = j
 #     return res
+# return the min value and max value of the two list
 def findmaxmin(innerAn, outAn):
     max1 = max(innerAn, key=abs)
     min1 = min(innerAn)
@@ -75,8 +75,8 @@ class StateMachine:
             # res.append(" {}[The button in the elevator];".format(innerAn))
             # res.append(" {}[The dictionary outside the elevator];".format(innerAn))
             # node.append(self.inputs[0])
-        for v in self.outputs:
-            res.append('   {}[];'.format(v))
+        # for v in self.outputs:
+        #     res.append('   {}[];'.format(v))
         for i in self.outputs:
             res.append('   {} -> {}[];'.format(i[0], i[1]))
 
@@ -115,12 +115,30 @@ if __name__ == "__main__":
     out5 = [3]
     a5 = 1
     b5 = 4
+
+    inner6 = [4, 3]
+    out6 = [3]
+    a6 = 0
+    b6 = 2
+
+    inner7 = [4, 3]
+    out7 = [3]
+    a7 = 1
+    b7 = 2
+
+    inner8 = [2]
+    out8 = [1, 2]
+    a8= 0
+    b8 = 3
     m = StateMachine()
     node1 = Node("S0", b1, a1, inner1, out1)
     node2 = Node("S1", b2, a2, inner2, out2)
     node3 = Node("S2", b3, a3, inner3, out3)
     node4 = Node("S3", b4, a4, inner4, out4)
     node5 = Node("S4", b5, a5, inner5, out5)
+    node6 = Node("S5", b6, a6, inner6, out6)
+    node7 = Node("S6", b7, a7, inner7, out7)
+    node8 = Node("S7", b8, a8, inner8, out8)
     # m.add_date(b1,a1,inner1,out1)
     # m.add_date(b2, a2, inner2, out2)
     # m.add_date(b3, a3, inner3, out3)
@@ -131,6 +149,9 @@ if __name__ == "__main__":
     m.add_node(node3)
     m.add_node(node4)
     m.add_node(node5)
+    m.add_node(node6)
+    m.add_node(node7)
+    m.add_node(node8)
     m.transition()
     dot = m.visualize()
     f = open('fsm.dot', 'w')
