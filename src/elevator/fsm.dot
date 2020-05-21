@@ -1,0 +1,18 @@
+digraph G {
+   rankdir=LR;
+   S0[];
+   S1[];
+   S2[];
+   S3[];
+   S4[];
+   ['S0', 'CloseUp'][];
+   ['S1', 'OpenStop'][];
+   ['S2', 'CloseUp'][];
+   ['S3', 'CloseDown'][];
+   ['S4', 'OpenStop'][];
+   S0 -> CloseUp[];
+   S1 -> OpenStop[];
+   S2 -> CloseUp[];
+   S3 -> CloseDown[];
+   S4 -> OpenStop[];
+}

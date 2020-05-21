@@ -10,7 +10,6 @@ class DiscreteEvent(object):
     def __init__(self, name="anonymous"):
         self.name = name
         self.inputs = OrderedDict()
-
         self.outputs = OrderedDict()
         self.nodes = []
         self.state_history = []
