@@ -1,4 +1,4 @@
-# CPO-lab2
+# r-CPO-lab2
 
 Computational Process Organization lab2 
 
