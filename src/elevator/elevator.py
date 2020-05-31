@@ -11,6 +11,7 @@ def findmaxmin(innerAn, outAn):
 class StateMachine:
     def __init__(self,name = "too hard"):
         self.name = name
+        self.state = None
         self.nextstate = None
         self.inputs = []
         self.outputs = [] # Output state
