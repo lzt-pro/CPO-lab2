@@ -1,5 +1,6 @@
 import unittest
 from disevent import *
+import graphviz
 class DiscreteEventTest(unittest.TestCase):
     def test_logic_not(self):
         m = DiscreteEvent("logic_not")
@@ -25,46 +26,41 @@ class DiscreteEventTest(unittest.TestCase):
          event(clock=7, node=n, var='A', val=False),
          event(clock=9, node=None, var='B', val=True),
          ])
-        # dot = m.visualize()
-        # f = open('fsm.dot', 'w')
-        # f.write(dot)
-        # f.close()
-        #
-        # with open("fsm.dot") as f:
-        #     dot_graph = f.read()
-        # dot = graphviz.Source(dot_graph)
-        # dot.view()
-    def test_decoder(self):
-        m = DiscreteEvent("2-4-decoder")
-        m.input_port("A0", latency=1)
-        m.input_port("A1", latency=1)
-        m.output_port("D0", latency=1)
-        m.output_port("D1", latency=1)
-        m.output_port("D2", latency=1)
-        m.output_port("D3", latency=1)
+    def test_elevator(self):
+        m = DiscreteEvent("elevator")
+        m.input_port("A_unoverload",latency=1)
+        m.input_port("A_up",latency=1)
+        m.output_port("D0_closeup",latency=1)
+        m.output_port("D1_closedown", latency=1)
+        m.output_port("D2_openstop", latency=1)
+
+        # 判断负载与否
         def add_not(a, b):
             n = m.add_node("!{} -> {}".format(a, b), lambda a: not a if isinstance(a, bool) else None)
             n.input(a, latency=1)
             n.output(b, latency=1)
+
         def add_and(a, b, c):
             n = m.add_node("{} and {} -> {}".format(a, b, c),
-                    lambda a, b: a and b if isinstance(a, bool) and isinstance(b, bool) else None)
+                           lambda a, b: a and b if isinstance(a, bool) and isinstance(b, bool) else None)
             n.input(a, 1)
             n.input(b, 1)
             n.output(c, 1)
-        add_not("A0", "notA0")
-        add_not("A1", "notA1")
-        add_and("notA0", "notA1", "D0")
-        add_and("A0", "notA1", "D1")
-        add_and("notA0", "A1", "D2")
-        add_and("A0", "A1", "D3")
+        add_not("A_unoverload","A_overload")
+        add_not("A_up","A_down")
+        # true代表 不超载，上升
+        # false 代表 超载，下降
+        add_and("A_unoverload", "A_up", "D0_closeup")
+        add_and("A_unoverload", "A_down", "D1_closedown")
+        add_and("A_overload", "A_up", "D2_openstop")
+        add_and("A_overload", "A_down", "D2_openstop")
         test_data = [
-             ({'A1': None, 'A0': False}, {'D3': None, 'D2': None, 'D1': None, 'D0': None}),
-             ({'A1': False, 'A0': False}, {'D3': False, 'D2': False, 'D1': False, 'D0': True}),
-             ({'A1': False, 'A0': True}, {'D3': False, 'D2': False, 'D1': True, 'D0': False}),
-             ({'A1': True, 'A0': False}, {'D3': False, 'D2': True, 'D1': False, 'D0': False}),
-             ({'A1': True, 'A0': True}, {'D3': True, 'D2': False, 'D1': False, 'D0': False})
-                ]
+            ({'A_up': None, 'A_unoverload': False}, {'D2_openstop': None, 'D2_openstop': None, 'D1_closedown': None, 'D0_closeup': None}),
+            # ({'A1': False, 'A0': False}, {'D3': False, 'D2': False, 'D1': False, 'D0': True}),
+            # ({'A1': False, 'A0': True}, {'D3': False, 'D2': False, 'D1': True, 'D0': False}),
+            # ({'A1': True, 'A0': False}, {'D3': False, 'D2': True, 'D1': False, 'D0': False}),
+            # ({'A1': True, 'A0': True}, {'D3': True, 'D2': False, 'D1': False, 'D0': False})
+        ]
         for a, d in test_data:
             source_events = [source_event(k, v, 0) for k, v in a.items()]
             actual = m.execute(*source_events)
@@ -72,15 +68,18 @@ class DiscreteEventTest(unittest.TestCase):
             expect.update(actual)
             expect.update(d)
             self.assertEqual(actual, expect)
-        # dot = m.visualize()
-        # f = open('fsm.dot', 'w')
-        # f.write(dot)
-        # f.close()
-        #
-        # with open("fsm.dot") as f:
-        #     dot_graph = f.read()
-        # dot = graphviz.Source(dot_graph)
-        # dot.view()
+        #print(m.visualize())
+        dot = m.visualize()
+        f = open('fsm.dot', 'w')
+        f.write(dot)
+        f.close()
+
+        with open("fsm.dot") as f:
+            dot_graph = f.read()
+        dot = graphviz.Source(dot_graph)
+        dot.view()
+
+
 class NodeTest(unittest.TestCase):
     def test_logic_not(self):
         n = Node("not", lambda a: not a if isinstance(a, bool) else None)

@@ -153,14 +153,14 @@ class DiscreteEvent(object):
             for v in n.inputs:
                 if v in self.inputs:
                     res.append(' {} -> n_{};'.format(v, i))
-        for j, n2 in enumerate(self.nodes):
-            if i == j: continue
-        for v in n.inputs:
-            if v in n2.outputs:
-                res.append(' n_{} -> n_{}[label="{}"];'.format(j, i, v))
-        for v in n.outputs:
-            if v in self.outputs:
-                res.append(' n_{} -> {};'.format(i, v))
+            for j, n2 in enumerate(self.nodes):
+                if i == j: continue
+                for v in n.inputs:
+                    if v in n2.outputs:
+                        res.append(' n_{} -> n_{}[label="{}"];'.format(j, i, v))
+            for v in n.outputs:
+                if v in self.outputs:
+                    res.append(' n_{} -> {};'.format(i, v))
         res.append("}")
         return "\n".join(res)
 

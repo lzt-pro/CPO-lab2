@@ -38,6 +38,14 @@ Finite state machine(Moore): The next state is only determined by the current st
 
 dot -Tpng fsm.dot -o test.png. 画图命令
 
+github 删除命令 
+
+**git rm -r --cached image**
+
+**git commit -m '删除了image'**
+
+**git push -u origin master**
+
 
 
 execute : 执行过程
