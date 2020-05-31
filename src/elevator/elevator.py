@@ -1,15 +1,5 @@
 import graphviz
 
-# def findlow( innerAn, outAn, current):
-#     res = 0
-#     for i in innerAn:
-#         if i > current and i < res:
-#             res = i;
-#     for j in outAn:
-#         if j < res:
-#             res = j
-#     return res
-# return the min value and max value of the two list
 def findmaxmin(innerAn, outAn):
     max1 = max(innerAn, key=abs)
     min1 = min(innerAn)
@@ -21,20 +11,12 @@ def findmaxmin(innerAn, outAn):
 class StateMachine:
     def __init__(self,name = "too hard"):
         self.name = name
-        # self.state = "OpenStop"
         self.nextstate = None
-        # self.current_left = 0
-        # self.overload = 0
-        # self.innerAn = [] # Elevator interior button
-        # self.outAn = []  # Elevator external button
         self.inputs = []
         self.outputs = [] # Output state
         self.active = [] # Execution action
     def add_state(self,state):
         self.state = state
-    # Add the input values for the inside and outside buttons of the elevator, and the load values args parameters should be entered in order
-    # ：state,current,overload, innerAn, outAn
-
     def add_node(self,node):
         self.inputs.append(node)
     # def add_date(self,*args):

@@ -5,14 +5,15 @@ digraph G {
    S2[];
    S3[];
    S4[];
-   ['S0', 'CloseUp'][];
-   ['S1', 'OpenStop'][];
-   ['S2', 'CloseUp'][];
-   ['S3', 'CloseDown'][];
-   ['S4', 'OpenStop'][];
+   S5[];
+   S6[];
+   S7[];
    S0 -> CloseUp[];
    S1 -> OpenStop[];
    S2 -> CloseUp[];
    S3 -> CloseDown[];
    S4 -> OpenStop[];
+   S5 -> CloseUp[];
+   S6 -> OpenStop[];
+   S7 -> CloseDown[];
 }
