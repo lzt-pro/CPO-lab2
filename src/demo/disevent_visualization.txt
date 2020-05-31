@@ -1,0 +1,29 @@
+digraph G {
+     rankdir=LR;
+     A0[shape=rarrow];
+     A1[shape=rarrow];
+     D0[shape=rarrow];
+     D1[shape=rarrow];
+     D2[shape=rarrow];
+     D3[shape=rarrow];
+     n_0[label="!A0 -> notA0"];
+     n_1[label="!A1 -> notA1"];
+     n_2[label="notA0 and notA1 -> D0"];
+     n_3[label="A0 and notA1 -> D1"];
+     n_4[label="notA0 and A1 -> D2"];
+     n_5[label="A0 and A1 -> D3"];
+     A0 -> n_0;
+     A1 -> n_1;
+     n_0 -> n_2[label="notA0"];
+     n_1 -> n_2[label="notA1"];
+     n_2 -> D0;
+     A0 -> n_3;
+     n_1 -> n_3[label="notA1"];
+     n_3 -> D1;
+     A1 -> n_4;
+     n_0 -> n_4[label="notA0"];
+     n_4 -> D2;
+     A0 -> n_5;
+     A1 -> n_5;
+     n_5 -> D3;
+    }
