@@ -1,5 +1,5 @@
 import unittest
-from disevent import *
+from src.disevent import *
 import graphviz
 class DiscreteEventTest(unittest.TestCase):
     def test_logic_not(self):

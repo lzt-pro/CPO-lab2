@@ -40,6 +40,8 @@ dot -Tpng fsm.dot -o test.png. 画图命令
 
 github 删除命令 
 
+**git pull origin master**
+
 **git rm -r --cached image**
 
 **git commit -m '删除了image'**
