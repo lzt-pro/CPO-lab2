@@ -5,7 +5,7 @@ event = namedtuple("Event", "clock node var val")
 source_event = namedtuple("SourceEvent", "var val latency")
 
 
-class DiscreteEvent(object):
+class StateMachine(object):
 
     def __init__(self, name="anonymous"):
         self.name = name

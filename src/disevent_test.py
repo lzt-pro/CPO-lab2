@@ -1,12 +1,12 @@
 import unittest
 from src.disevent import *
 import graphviz
-class DiscreteEventTest(unittest.TestCase):
-    def test_logic_not(self):
-        m = DiscreteEvent("logic_not")
+class StateMachineTest(unittest.TestCase):
+    def test_convert_state(self):
+        m = StateMachine("convert_state")
         m.input_port("A", latency=1)
         m.output_port("B", latency=1)
-        n = m.add_node("not", lambda a: not a if isinstance(a, bool) else None)
+        n = m.add_node("convert", lambda a: not a if isinstance(a, bool) else None)
         n.input("A", latency=1)
         n.output("B", latency=1)
         m.execute(
@@ -27,33 +27,33 @@ class DiscreteEventTest(unittest.TestCase):
          event(clock=9, node=None, var='B', val=True),
          ])
     def test_elevator(self):
-        m = DiscreteEvent("elevator")
+        m = StateMachine("elevator")
         m.input_port("A_unoverload",latency=1)
         m.input_port("A_up",latency=1)
         m.output_port("D0_closeup",latency=1)
         m.output_port("D1_closedown", latency=1)
         m.output_port("D2_openstop", latency=1)
 
-        # 判断负载与否
-        def add_not(a, b):
+
+        def add_load(a, b):
             n = m.add_node("!{} -> {}".format(a, b), lambda a: not a if isinstance(a, bool) else None)
             n.input(a, latency=1)
             n.output(b, latency=1)
 
-        def add_and(a, b, c):
+        def add_convert(a, b, c):
             n = m.add_node("{} and {} -> {}".format(a, b, c),
                            lambda a, b: a and b if isinstance(a, bool) and isinstance(b, bool) else None)
             n.input(a, 1)
             n.input(b, 1)
             n.output(c, 1)
-        add_not("A_unoverload","A_overload")
-        add_not("A_up","A_down")
-        # true代表 不超载，上升
-        # false 代表 超载，下降
-        add_and("A_unoverload", "A_up", "D0_closeup")
-        add_and("A_unoverload", "A_down", "D1_closedown")
-        add_and("A_overload", "A_up", "D2_openstop")
-        add_and("A_overload", "A_down", "D2_openstop")
+        add_load("A_unoverload","A_overload")
+        add_load("A_up","A_down")
+        # True means not overloaded, rising
+        # False is overload, down
+        add_convert("A_unoverload", "A_up", "D0_closeup")
+        add_convert("A_unoverload", "A_down", "D1_closedown")
+        add_convert("A_overload", "A_up", "D2_openstop")
+        add_convert("A_overload", "A_down", "D2_openstop")
         test_data = [
             ({'A_up': None, 'A_unoverload': False}, {'D2_openstop': None, 'D2_openstop': None, 'D1_closedown': None, 'D0_closeup': None}),
             # ({'A1': False, 'A0': False}, {'D3': False, 'D2': False, 'D1': False, 'D0': True}),
