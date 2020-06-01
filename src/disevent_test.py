@@ -4,8 +4,8 @@ import graphviz
 
 
 class StateMachineTest(unittest.TestCase):
-    def test_convert_state(self):
-        m = StateMachine("convert_state")
+    def test_convert_self_state(self):
+        m = StateMachine("convert_self_state")
         m.input_port("A", latency=1)
         m.output_port("B", latency=1)
         n = m.add_node("convert", lambda a: not a if isinstance(a, bool) else None)
@@ -60,7 +60,7 @@ class StateMachineTest(unittest.TestCase):
         test_data = [
             ({'A_up': None, 'A_unoverload': False},
              {'D2_openstop': None, 'D2_openstop': None, 'D1_closedown': None, 'D0_closeup': None}),
-           
+
         ]
         for a, d in test_data:
             source_events = [source_event(k, v, 0) for k, v in a.items()]
@@ -82,8 +82,8 @@ class StateMachineTest(unittest.TestCase):
 
 
 class NodeTest(unittest.TestCase):
-    def test_logic_not(self):
-        n = Node("not", lambda a: not a if isinstance(a, bool) else None)
+    def test_convert_self_state(self):
+        n = Node("convert_self_state", lambda a: not a if isinstance(a, bool) else None)
         n.input("A", 1)
         n.output("B", 1)
         test_data = [
@@ -94,8 +94,8 @@ class NodeTest(unittest.TestCase):
         for a, b in test_data:
             self.assertEqual(n.activate({"A": a}), [source_event("B", b, 1)])
 
-    def test_logic_and(self):
-        n = Node("and", lambda a, b: a and b if isinstance(a, bool) and isinstance(b, bool) else None)
+    def test_add_convert(self):
+        n = Node("convert", lambda a, b: a and b if isinstance(a, bool) and isinstance(b, bool) else None)
         n.input("A", 1)
         n.input("B", 1)
         n.output("C", 1)
@@ -109,13 +109,13 @@ class NodeTest(unittest.TestCase):
         for a, b, c in test_data:
             self.assertEqual(n.activate({"A": a, "B": b}), [source_event("C", c, 1)])
 
-    def test_1_to_2_decoder(self):
-        def decoder(a):
+    def test_convert(self):
+        def convert(a):
             if a == 0: return (0, 1)
             if a == 1: return (1, 0)
             return (None, None)
 
-        n = Node("decoder", decoder)
+        n = Node("convert", convert)
         n.input("A", 1)
         n.output("D1", 1)
         n.output("D0", 2)
